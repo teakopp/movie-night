@@ -18,7 +18,10 @@ class SearchBar extends Component {
   }
 
   handleSubmit(event){
-
+    fetch("http://localhost:3000/", {
+    method: "POST",
+    body: 'ok'
+    })
   }
 
   render() {
