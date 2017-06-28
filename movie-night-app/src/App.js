@@ -7,27 +7,30 @@ import fetch from 'isomorphic-fetch'
 class SearchBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {"inputValue" : "ok"};
-
+    this.state = {"movie" : "ok"};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
-    this.setState({value: event.target.value})
+      this.setState({value: ''})
+      this.setState({value: event.target.value})
+
   }
 
   handleSubmit(event){
     fetch("http://localhost:3000/", {
-    method: "POST",
-    body: 'ok'
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        movieTitle: this.state.value,
+      })
     })
   }
-
   render() {
     return (
       <div>
-        <input type="text" value={this.state.value} onChange={this.handleChange} />
+        <input type="text" value={this.state.value || ''} placeholder='Enter Movie Title Here' onChange={this.handleChange} />
         <button onClick={this.handleSubmit}>Submit</button>
       </div>
     )
