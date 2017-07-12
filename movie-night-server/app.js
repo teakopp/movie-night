@@ -16,28 +16,26 @@ app.use(cors())
 app.route('/search')
   .get((req,res) => {
 
-    let movieTitle = req.query.q
-    let movies = {}
-
+    let movieTitle = encodeURIComponent(req.query.q.trim())
+    console.log(req.query.q);
     const options = {
       host: 'api.themoviedb.org',
       port: 80,
       path: '/3/search/movie?api_key=' + key + '&language=en-US&query=' + movieTitle + '&page=1&include_adult=false'
     };
 
-    http.get(options, (res) => {
+    http.get(options, (response) => {
       let body = '';
 
-      res.on('data', (chunk) => {
+      response.on('data', (chunk) => {
         body += chunk;
       })
 
-      res.on('end', (movies) => {
-        movies = JSON.parse(body);
+      response.on('end', () => {
+        res.send(body)
       })
     })
 
-    console.log(movies);
 
 
 

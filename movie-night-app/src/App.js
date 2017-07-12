@@ -19,12 +19,14 @@ class SearchBar extends Component {
   }
 
   handleSubmit(event){
-    fetch("http://localhost:3000/", {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        movieTitle: this.state.value,
-      })
+    console.log(this.state.value);
+    fetch("http://localhost:3000/search?q=" + this.state.value, {
+      method: "GET",
+      headers: { 'Content-Type': 'application/json' }
+    }).then((response) => {
+      return response.json();
+    }).then((parsedData) => {
+      console.log(parsedData);
     })
   }
   render() {
