@@ -13,10 +13,11 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cors())
 
-app.route('/')
-  .post((req,res) => {
-    console.log(req.body.movieTitle);
-    let movieTitle = req.body.movieTitle
+app.route('/search')
+  .get((req,res) => {
+
+    let movieTitle = req.query.q
+    let movies = {}
 
     const options = {
       host: 'api.themoviedb.org',
@@ -31,11 +32,13 @@ app.route('/')
         body += chunk;
       })
 
-      res.on('end', () => {
-        let movies = JSON.parse(body);
-        console.log(movies);
+      res.on('end', (movies) => {
+        movies = JSON.parse(body);
       })
     })
+
+    console.log(movies);
+
 
 
 })
