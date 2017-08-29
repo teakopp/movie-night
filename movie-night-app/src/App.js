@@ -4,6 +4,8 @@ import fetch from 'isomorphic-fetch'
 import { Grid, Row, Col, Image, Modal, Button, Table} from 'react-bootstrap';
 import questionMark from './icons/question-mark.jpg'
 
+
+
 class SearchBar extends Component {
   constructor(props) {
     super(props);
@@ -13,6 +15,7 @@ class SearchBar extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
   }
 
   handleChange(event) {
@@ -34,6 +37,10 @@ class SearchBar extends Component {
     }
   }
 
+  handleAdd(event){
+    console.log(this.state.value);
+  }
+
   render() {
     const movies = this.state.movies
 
@@ -46,12 +53,13 @@ class SearchBar extends Component {
             if( movie.original_title && movie.original_title !== '' && movie.poster_path){
               return (
                   <Row key={movie.id} className="show-grid">
-                      <Col xs={3} md={3} xsOffset={3}>
+                      <Col xs={3} md={3} xsOffset={2}>
                         <Image src={"https://image.tmdb.org/t/p/w300" + movie.poster_path} alt={movie.original_title} responsive />
                       </Col>
-                      <Col xs={6} md={6} className="content">
+                      <Col xs={4} md={4} className="content">
                         <h3 className="text-left">{movie.original_title}</h3>
                         <p className="text-left">{movie.overview}</p>
+                        <Button bsStyle="success" className="add" onClick={this.handleAdd} >Add to lottery</Button>
                       </Col>
                       <Col xs={12} md={12} className="spacer-row"></Col>
                   </Row>
@@ -60,16 +68,18 @@ class SearchBar extends Component {
             else if( movie.original_title && movie.original_title !== '' && !movie.poster_path){
                 return (
                   <Row key={movie.id} className="show-grid">
-                    <Col xs={3} md={3} xsOffset={3}>
+                    <Col xs={3} md={3} xsOffset={2}>
                       <Image src ={questionMark} alt="?" className="missing"  />
                       <Col xs={12} md={12}>
                         <h4 >Image Missing</h4>
                       </Col>
                     </Col>
-                    <Col xs={6} md={6} className="content">
+                    <Col xs={4} md={4} className="content">
                       <h3 className="text-left">{movie.original_title}</h3>
                       <p className="text-left">{movie.overview}</p>
+                      <Button bsStyle="success" className="add">Add to lottery</Button>
                     </Col>
+                    <Col xs={12} md={12} className="spacer-row"></Col>
                   </Row>
               )
             }
@@ -84,7 +94,6 @@ class SearchBar extends Component {
     )
   }
 }
-
 
 class App extends Component {
   render() {
