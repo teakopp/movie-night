@@ -23,6 +23,7 @@ class SearchBar extends Component {
       this.setState({value: event.target.value})
   }
 
+
   handleSubmit(event){
     if(this.state.value !== ''){
       fetch("http://localhost:3000/search?q=" + this.state.value, {
@@ -38,7 +39,19 @@ class SearchBar extends Component {
   }
 
   handleAdd(event){
-    console.log(this.state.value);
+    const i = event.target.value
+    let data = {"title" : this.state.movies[i].original_title}
+    console.log(data);
+
+      fetch("http://localhost:3000/", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      }).then((response) => {
+        return response.json();
+      }).then((parsedData) => {
+
+      })
   }
 
   render() {
@@ -59,7 +72,7 @@ class SearchBar extends Component {
                       <Col xs={4} md={4} className="content">
                         <h3 className="text-left">{movie.original_title}</h3>
                         <p className="text-left">{movie.overview}</p>
-                        <Button bsStyle="success" className="add" onClick={this.handleAdd} >Add to lottery</Button>
+                        <Button bsStyle="success" className="add" value={index} onClick={this.handleAdd}>Add to lottery</Button>
                       </Col>
                       <Col xs={12} md={12} className="spacer-row"></Col>
                   </Row>
@@ -77,7 +90,7 @@ class SearchBar extends Component {
                     <Col xs={4} md={4} className="content">
                       <h3 className="text-left">{movie.original_title}</h3>
                       <p className="text-left">{movie.overview}</p>
-                      <Button bsStyle="success" className="add">Add to lottery</Button>
+                      <Button bsStyle="success" value={index} className="add">Add to lottery</Button>
                     </Col>
                     <Col xs={12} md={12} className="spacer-row"></Col>
                   </Row>

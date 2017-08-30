@@ -13,6 +13,10 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cors())
 
+app.post('/', (req, res) => {
+    console.log(req.body);
+  })
+
 app.route('/search')
   .get((req,res) => {
 
@@ -35,11 +39,8 @@ app.route('/search')
         res.send(body)
       })
     })
+  })
 
-
-
-
-})
 
 app.listen(3000, ()=>{
   console.log('App listening on port 3000!')
