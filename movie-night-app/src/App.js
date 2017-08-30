@@ -40,7 +40,9 @@ class SearchBar extends Component {
 
   handleAdd(event){
     const i = event.target.value
-    let data = {"title" : this.state.movies[i].original_title}
+    const movieData = this.state.movies[i]
+    let data = {"title" : movieData.original_title,
+                "movieid" : movieData.id}
     console.log(data);
 
       fetch("http://localhost:3000/", {
@@ -90,7 +92,7 @@ class SearchBar extends Component {
                     <Col xs={4} md={4} className="content">
                       <h3 className="text-left">{movie.original_title}</h3>
                       <p className="text-left">{movie.overview}</p>
-                      <Button bsStyle="success" value={index} className="add">Add to lottery</Button>
+                      <Button bsStyle="success" className="add" value={index} onClick={this.handleAdd}>Add to lottery</Button>
                     </Col>
                     <Col xs={12} md={12} className="spacer-row"></Col>
                   </Row>
