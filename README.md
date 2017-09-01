@@ -1,4 +1,7 @@
 # movie-night
+
+Clone project
+
 To setup Server
 ```
 clone project
@@ -8,12 +11,6 @@ npm install
 To setup Client
 ```
 cd movie-night-app
-npm install
-```
-
-To setup Project
-```
-clone project
 npm install
 ```
 
