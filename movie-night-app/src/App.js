@@ -5,6 +5,9 @@ import { Grid, Row, Col, Image, Modal, Button, Table} from 'react-bootstrap';
 import questionMark from './icons/question-mark.jpg'
 
 
+const LotteryButton  = () => {
+  console.log('ok');
+}
 
 class SearchBar extends Component {
   constructor(props) {
@@ -26,12 +29,28 @@ class SearchBar extends Component {
 
   handleSubmit(event){
     if(this.state.value !== ''){
+
+      fetch("http://localhost:3000/", {
+        method: "GET",
+        headers: { 'Content-Type': 'application/json' }
+        }).then((response) => {
+        return response.json();
+        }).then((parsedData) => {
+        this.setState({moviesInLottery : parsedData})
+        let moviesInLotteryId = {}
+        for( let i=0; i < parsedData.length; i++){
+          console.log(parsedData[i]);
+        }
+
+      })
+
+
       fetch("http://localhost:3000/search?q=" + this.state.value, {
         method: "GET",
         headers: { 'Content-Type': 'application/json' }
-      }).then((response) => {
+        }).then((response) => {
         return response.json();
-      }).then((parsedData) => {
+        }).then((parsedData) => {
         this.setState({movies: parsedData.results})
         console.log(parsedData);
       })
@@ -42,29 +61,35 @@ class SearchBar extends Component {
     const i = event.target.value
     const movieData = this.state.movies[i]
     let data = {"title" : movieData.original_title,
-                "movieid" : movieData.id}
+                "movieid" : movieData.id,
+                "movieoverview" : movieData.overview,
+                "posterurl" :  "https://image.tmdb.org/t/p/w300" + movieData.poster_path
+               }
     console.log(data);
 
       fetch("http://localhost:3000/", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
-      }).then((response) => {
-        return response.json();
-      }).then((parsedData) => {
-
+        }).then((response) => {
+          return response.json();
+        }).then((parsedData) => {
+          console.log(parsedData);
       })
   }
 
   render() {
-    const movies = this.state.movies
 
+    const movies = this.state.movies
+    const moviesInLottery = this.state.moviesInLottery
     return (
       <div>
         <input type="text" value={this.state.value || ''} placeholder='Enter Movie Title Here' onChange={this.handleChange} />
         <button onClick={this.handleSubmit}>Submit</button>
         <Grid>
           {movies.map((movie, index) => {
+
+
             if( movie.original_title && movie.original_title !== '' && movie.poster_path){
               return (
                   <Row key={movie.id} className="show-grid">

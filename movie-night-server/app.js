@@ -6,6 +6,7 @@ const path = require('path');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 const key = process.env.SECRET_KEY;
+const MongoClient = require('mongodb').MongoClient
 
 
 
@@ -14,8 +15,45 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 app.use(cors())
 
 app.post('/', (req, res) => {
-    console.log(req.body);
+  const movieName = req.body
+  const title = movieName.title
+  const overview = movieName.overview
+  const posterurl = movieName.posterurl
+  const movieId = movieName.id
+
+  MongoClient.connect('mongodb://localhost:27017/movienight', function (err, db) {
+    (db.collection('lottery').count({ "title" : title })).then((thing)=>{
+      console.log(count);
+      if(count == 0){
+        db.collection('lottery').insert(
+          {
+          "title" : title,
+          "movieid" : movieId,
+          "overview" : overview,
+          "posterurl" : posterurl
+          }
+        )
+        res.send({ "message" : title + ' has been added to lottery!'})
+      }
+      else{
+        console.log("Entry already exists");
+        res.send({"message" : "Entry already exists"});
+      }
+    })
+    if (err) throw err
   })
+})
+
+app.get('/', (req, res) => {
+  MongoClient.connect('mongodb://localhost:27017/movienight', function (err, db) {
+    if (err) throw err
+
+    db.collection('lottery').find().toArray(function (err, result) {
+      if (err) throw err
+      res.send(result)
+    })
+  })
+})
 
 app.route('/search')
   .get((req,res) => {
